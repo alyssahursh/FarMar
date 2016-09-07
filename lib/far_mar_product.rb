@@ -13,7 +13,7 @@ require_relative '../far_mar.rb'
 
 class FarMar::Product
 
-  attr_reader :product_id
+  attr_reader :product_id, :vendor_id
 
   def initialize(product_hash)
     @product_id = product_hash[:product_id] # (Fixnum) a unique identifier for that product
@@ -49,6 +49,8 @@ class FarMar::Product
 
   # vendor: returns the FarMar::Vendor instance that is associated with this vendor using the FarMar::Product vendor_id field
   def vendor
+    vendor = FarMar::Vendor.find(@vendor_id)
+    vendor
   end
 
   # sales: returns a collection of FarMar::Sale instances that are associated using the FarMar::Sale product_id field.
