@@ -28,7 +28,7 @@ describe 'Test Product' do
     expect(found_product.product_id).must_equal(random_number)
   end
 
-  it '.vendor returns a vendor instance' do
+  it '.vendor returns a FarMar::Vendor instance' do
     vendor = products[rand(length)].vendor
     expect(vendor.class).must_equal(FarMar::Vendor)
   end
@@ -39,19 +39,68 @@ describe 'Test Product' do
     expect(vendor.vendor_id).must_equal(product.vendor_id)
   end
 
-
-
-
-  # sales: returns a collection of FarMar::Sale instances that are associated using the FarMar::Sale product_id field.
-  def sales
+  it '.sales returns an array' do
+    product = products[rand(length)]
+    sales = product.sales
+    expect(sales.class).must_equal(Array)
   end
 
-  # number_of_sales: returns the number of times this product has been sold.
-  def number_of_sales
+  it '.sales returns an array containing FarMar:Sale instances' do
+    product = products[rand(length)]
+    sales = product.sales
+    sales.each do |sale|
+      expect(sale.class).must_equal(FarMar::Sale)
+    end
   end
 
-  # self.by_vendor(vendor_id): returns all of the products with the given vendor_id
-  def self.by_vendor(vendor_id)
+  it '.sales returns sales with the correct product id' do
+    product = products[rand(length)]
+    sales = product.sales
+    sales.each do |sale|
+      expect(sale.product_id).must_equal(product.product_id)
+    end
   end
+
+  it '.number_of_sales returns an integer' do
+    product = products[rand(length)]
+    expect(product.number_of_sales.class).must_equal(Fixnum)
+  end
+
+  it '.number_of_sales returns the correct number of times the product has been sold' do
+    product = products[rand(length)]
+    sale_list = FarMar::Sale.all
+    num_sales = 0
+    sale_list.each do |sale|
+      if sale.product_id == product.product_id
+        num_sales += 1
+      end
+    end
+    expect(product.number_of_sales).must_equal(num_sales)
+  end
+
+  it 'self.by_vendor(vendor_id) returns an array' do
+    all_vendors = FarMar::Vendor.all
+    by_vendor = FarMar::Product.by_vendor(all_vendors[rand(all_vendors.length)])
+    expect(by_vendor.class).must_equal(Array)
+  end
+
+  it 'the elements in the self.by_vendor(vendor_id) array are instances of the FarMar::Product class' do
+    all_vendors = FarMar::Vendor.all
+    random_vendor = all_vendors[rand(all_vendors.length)]
+    by_vendor = FarMar::Product.by_vendor(random_vendor)
+    by_vendor.each do |product|
+      expect(product.class).must_equal(FarMar::Product)
+    end
+  end
+
+  it 'the elements in the self.by_vendor(vendor_id) array have the correct vendor_id' do
+    all_vendors = FarMar::Vendor.all
+    random_vendor = all_vendors[rand(all_vendors.length)]
+    by_vendor = FarMar::Product.by_vendor(random_vendor)
+    by_vendor.each do |product|
+      expect(product.vendor_id).must_equal(random_vendor.vendor_id)
+    end
+  end
+
 
 end

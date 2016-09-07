@@ -14,7 +14,7 @@ require_relative '../far_mar.rb'
 
 class FarMar::Sale
 
-  attr_reader :sale_id
+  attr_reader :sale_id, :product_id
 
   def initialize(sale_hash)
     @sale_id = sale_hash[:sale_id] # (Fixnum) a unique identifier for that sale
@@ -64,6 +64,6 @@ class FarMar::Sale
   # self.between(beginning_time, end_time): returns a collection of FarMar::Sale objects where the purchase time is between the two times given as arguments
   def self.between(beginning_time, end_time)
   end
-  
+
 
 end
