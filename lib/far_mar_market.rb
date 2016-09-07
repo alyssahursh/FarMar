@@ -60,7 +60,7 @@ class FarMar::Market
     vendor_of_market_array = []
 
     complete_vendor_array.each do |vendor|
-      if vendor.vendor_market_id == @market_id
+      if vendor.market_id == @market_id
         vendor_of_market_array << vendor
       end
     end

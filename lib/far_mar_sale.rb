@@ -20,8 +20,8 @@ class FarMar::Sale
     @sale_id = sale_hash[:sale_id] # (Fixnum) a unique identifier for that sale
     @sale_amount = sale_hash[:sale_amount] # (Fixnum) the amount of the transaction, in cents (i.e., 150 would be $1.50)
     @sale_purchase_time = sale_hash[:sale_purchase_time] # (Datetime) when the sale was completed
-    @sale_market_id = sale_hash[:sale_market_id] # (Fixnum) a reference to which sale completed the sale
-    @sale_product_id = sale_hash[:sale_product_id] # (Fixnum) a reference to which product was sold
+    @market_id = sale_hash[:market_id] # (Fixnum) a reference to which sale completed the sale
+    @product_id = sale_hash[:product_id] # (Fixnum) a reference to which product was sold
   end
 
   def self.all
@@ -33,8 +33,8 @@ class FarMar::Sale
       sale_hash[:sale_id] = line[0].to_i
       sale_hash[:sale_amount] = line[1].to_i
       sale_hash[:sale_purchase_time] = line[2]
-      sale_hash[:sale_market_id] = line[3].to_i
-      sale_hash[:sale_product_id] = line[4].to_i
+      sale_hash[:market_id] = line[3].to_i
+      sale_hash[:product_id] = line[4].to_i
       sale = FarMar::Sale.new(sale_hash)
       all_sale_instances << sale
     end
@@ -53,5 +53,17 @@ class FarMar::Sale
     end
   end
 
+  # vendor: returns the FarMar::Vendor instance that is associated with this sale using the FarMar::Sale vendor_id field
+  def vendor
+  end
+
+  # product: returns the FarMar::Product instance that is associated with this sale using the FarMar::Sale product_id field
+  def product
+  end
+
+  # self.between(beginning_time, end_time): returns a collection of FarMar::Sale objects where the purchase time is between the two times given as arguments
+  def self.between(beginning_time, end_time)
+  end
+  
 
 end
