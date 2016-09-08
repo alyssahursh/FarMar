@@ -71,7 +71,7 @@ class FarMar::Sale
     sales_between = []
     all_sales = all
     all_sales.each do |sale|
-      if sale.purchase_time > beginning_time # && sale.purchase_time <= end_time
+      if sale.purchase_time > beginning_time && sale.purchase_time < end_time
         sales_between << sale
       end
     end

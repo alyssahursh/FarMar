@@ -57,23 +57,15 @@ describe 'Test Sale' do
 
 
   it 'self.between(beginning_time, end_time) returns an array' do
-    date1 = Time.new(2013, rand(11), rand(1..14))
-    date2 = Time.new(2013, rand(11), rand(15..28))
-
-    if date1 > date2
-      date1, date2 = date2, date1
-    end
+    date1 = Time.new(2013, 11, rand(1..10))
+    date2 = Time.new(2013, 11, rand(20..30))
 
     expect(FarMar::Sale.between(date1, date2).class).must_equal(Array)
   end
 
   it 'elements of the self.between(beginning_time, end_time) array are instances of FarMar::Sale' do
-    date1 = Time.new(2013, rand(11), rand(1..14))
-    date2 = Time.new(2013, rand(11), rand(15..28))
-
-    if date1 > date2
-      date1, date2 = date2, date1
-    end
+    date1 = Time.new(2013, 11, rand(1..10))
+    date2 = Time.new(2013, 11, rand(20..30))
 
     certain_sales = FarMar::Sale.between(date1, date2)
     certain_sales.each do |sale|
@@ -82,12 +74,8 @@ describe 'Test Sale' do
   end
 
   it 'elements of the self.between(beginning_time, end_time) array are between the beginning_time and end_time inputs' do
-    date1 = Time.new(2013, rand(11), rand(1..14))
-    date2 = Time.new(2013, rand(11), rand(15..28))
-
-    if date1 > date2
-      date1, date2 = date2, date1
-    end
+    date1 = Time.new(2013, 11, rand(1..10))
+    date2 = Time.new(2013, 11, rand(20..30))
 
     certain_sales = FarMar::Sale.between(date1, date2)
     certain_sales.each do |sale|
