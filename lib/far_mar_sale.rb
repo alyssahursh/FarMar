@@ -33,7 +33,7 @@ class FarMar::Sale
       sale_hash = {}
       sale_hash[:sale_id] = line[0].to_i
       sale_hash[:sale_amount] = line[1].to_i
-      sale_hash[:purchase_time] = Time.new(line[2])
+      sale_hash[:purchase_time] = DateTime.strptime(line[2], '%Y-%m-%d %H:%M:%S %z')
       sale_hash[:vendor_id] = line[3].to_i
       sale_hash[:product_id] = line[4].to_i
       sale = FarMar::Sale.new(sale_hash)
@@ -45,13 +45,17 @@ class FarMar::Sale
   end
 
   def self.find(id)
+    raise ArgumentError, "Sale ID must be numeric" if id =~ /[[:alpha][:punct:][:blank:]]/
+
     array = all
-    array.each do |sale|
-      if sale.sale_id == id
-        return sale
-        break
+    array.each do |this_sale|
+      if this_sale.sale_id == id
+        return this_sale
       end
     end
+
+    raise ArgumentError, "Vendor ID not found"
+
   end
 
   # vendor: returns the FarMar::Vendor instance that is associated with this sale using the FarMar::Sale vendor_id field
@@ -68,14 +72,18 @@ class FarMar::Sale
 
   # self.between(beginning_time, end_time): returns a collection of FarMar::Sale objects where the purchase time is between the two times given as arguments
   def self.between(beginning_time, end_time)
+    if beginning_time > end_time
+      beginning_time, end_time = end_time, beginning_time
+    end
+
     sales_between = []
     all_sales = all
-    all_sales.each do |sale|
-      if sale.purchase_time > beginning_time && sale.purchase_time < end_time
-        sales_between << sale
+    all_sales.each do |this_sale|
+      if this_sale.purchase_time >= beginning_time && this_sale.purchase_time <= end_time
+        sales_between << this_sale
       end
     end
-    sales_between
+    return sales_between
   end
 
 

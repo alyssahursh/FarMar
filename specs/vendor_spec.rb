@@ -17,8 +17,10 @@ describe 'Test Vendor' do
     expect(vendors.length).must_equal(length)
   end
 
-  it 'A random element of self.all is an instance of the class FarMar::Vendor' do
-    expect(vendors[rand(length)].class).must_equal(FarMar::Vendor)
+  it 'Elements of self.all is an instance of the class FarMar::Vendor' do
+    vendors.each do |vendor|
+      expect(vendor.class).must_equal(FarMar::Vendor)
+    end
   end
 
   it 'self.find(id) method returns instance of the class FarMar::Market with correct ID' do
@@ -28,6 +30,13 @@ describe 'Test Vendor' do
     expect(found_vendor.vendor_id).must_equal(random_number)
   end
 
+  it 'self.find(id) raises argument error for non-numeric input' do
+    expect( proc {FarMar::Vendor.find("A String!")}).must_raise(ArgumentError)
+  end
+
+  it 'self.find(id) raises argument error if ID does not exist' do
+    expect( proc {FarMar::Vendor.find(12345678901234567890)}).must_raise(ArgumentError)
+  end
 
   it '.market returns a FarMar::Market instance' do
     vendor = vendors[rand(length)]
@@ -104,7 +113,6 @@ describe 'Test Vendor' do
 
   end
 
-  # self.by_market(market_id): returns all of the vendors with the given market_id
   it 'self.by_market(market_id) returns an array' do
     all_markets = FarMar::Market.all
     random_market = all_markets[rand(all_markets.length)]

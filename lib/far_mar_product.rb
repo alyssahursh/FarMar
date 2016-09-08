@@ -39,18 +39,23 @@ class FarMar::Product
   end
 
   def self.find(id)
+    raise ArgumentError, "Product ID must be numeric" if id =~ /[[:alpha][:punct:][:blank:]]/
+
     array = all
     array.each do |product|
       if product.product_id == id
         return product
       end
     end
+
+    raise ArgumentError, "Product ID not found"
+
   end
 
   # vendor: returns the FarMar::Vendor instance that is associated with this vendor using the FarMar::Product vendor_id field
   def vendor
-    vendor = FarMar::Vendor.find(@vendor_id)
-    vendor
+    product_vendor = FarMar::Vendor.find(@vendor_id)
+    product_vendor
   end
 
   # sales: returns a collection of FarMar::Sale instances that are associated using the FarMar::Sale product_id field.
@@ -58,7 +63,7 @@ class FarMar::Product
     sales_array = []
     sale_list = FarMar::Sale.all
     sale_list.each do |sale|
-      if sale.product_id == product_id
+      if sale.product_id == @product_id
         sales_array << sale
       end
     end

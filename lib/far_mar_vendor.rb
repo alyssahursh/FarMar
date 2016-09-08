@@ -40,13 +40,17 @@ class FarMar::Vendor
 
 
   def self.find(id)
+    raise ArgumentError, "Vendor ID must be numeric" if id =~ /[[:alpha][:punct:][:blank:]]/
+
     array = all
     array.each do |vendor|
       if vendor.vendor_id == id
         return vendor
-        break
       end
     end
+
+    raise ArgumentError, "Vendor ID not found"
+
   end
 
   # market: returns the FarMar::Market instance that is associated with this vendor using the FarMar::Vendor market_id field
@@ -71,7 +75,7 @@ class FarMar::Vendor
     sale_array = []
     all_sales = FarMar::Sale.all
     all_sales.each do |sale|
-      if sale.vendor_id == vendor_id
+      if sale.vendor_id == @vendor_id
         sale_array << sale
       end
     end

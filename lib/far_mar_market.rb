@@ -46,12 +46,15 @@ class FarMar::Market
   end
 
   def self.find(id)
+    raise ArgumentError, "Market ID must be numeric" if id =~ /[[:alpha][:punct:][:blank:]]/
+
     array = all
     array.each do |market|
       if market.market_id == id.to_i
         return market
       end
     end
+    raise ArgumentError, "Market ID not found"
   end
 
   def vendors
