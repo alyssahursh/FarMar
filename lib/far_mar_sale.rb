@@ -25,19 +25,28 @@ class FarMar::Sale
     @product_id = sale_hash[:product_id] # (Fixnum) a reference to which product was sold
   end
 
-  def self.all
+  def self.all(date = nil)
+    if date != nil
+      date1 = DateTime.strptime(date, '%Y-%m-%d')
+      date2 = date1.next_day(1)
+    end
 
     all_sale_instances = []
 
     CSV.open('/Users/alyssa/ada/Week5/FarMar/support/sales.csv', 'r').each do |line|
       sale_hash = {}
-      sale_hash[:sale_id] = line[0].to_i
-      sale_hash[:sale_amount] = line[1].to_i
       sale_hash[:purchase_time] = DateTime.strptime(line[2], '%Y-%m-%d %H:%M:%S %z')
-      sale_hash[:vendor_id] = line[3].to_i
-      sale_hash[:product_id] = line[4].to_i
-      sale = FarMar::Sale.new(sale_hash)
-      all_sale_instances << sale
+
+      if date != nil && (sale_hash[:purchase_time] < date1 || sale_hash[:purchase_time] > date2)
+        next
+      else
+        sale_hash[:sale_id] = line[0].to_i
+        sale_hash[:sale_amount] = line[1].to_i
+        sale_hash[:vendor_id] = line[3].to_i
+        sale_hash[:product_id] = line[4].to_i
+        sale = FarMar::Sale.new(sale_hash)
+        all_sale_instances << sale
+      end
     end
 
     return all_sale_instances
@@ -83,6 +92,5 @@ class FarMar::Sale
     end
     return sales_between
   end
-
 
 end

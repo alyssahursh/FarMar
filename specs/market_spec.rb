@@ -11,10 +11,13 @@ describe 'Test Market' do
   let(:market_array_length) { CSV.read('/Users/alyssa/ada/Week5/FarMar/support/markets.csv').length }
   let(:rand_num) { rand(market_array_length) }
   let(:random_market) { markets[rand_num] }
+  let(:market_name) { random_market.market_name }
   let(:market_vendor) { random_market.vendors }
   let(:found_market) { FarMar::Market.find(rand_num) }
   let(:some_products) { random_market.products }
   let(:search_school) { FarMar::Market.search('school') }
+  let(:rand_mar_pref_vend) { random_market.prefered_vendor }
+  let(:rand_mar_worst_vend) { random_market.worst_vendor }
 
 
   it 'self.all method returns an object of class Array' do
@@ -100,6 +103,67 @@ describe 'Test Market' do
       search_result_string = "#{search_result.market_id} #{search_result.market_name} #{search_result.market_address} #{search_result.market_city} #{search_result.market_county} #{search_result.market_state} #{search_result.market_zip}".gsub(/[[:punct:]]/, " ").downcase
       expect(search_result_string).must_include('school')
     end
+  end
+
+
+
+  ######## NEW AS OF FRIDAY AFTERNOON - "PREFACTOR"
+
+
+
+
+  it '.prefered_vendor returns a single FarMar::Vendor' do
+    expect(rand_mar_pref_vend.class).must_equal(FarMar::Vendor)
+  end
+
+  it '.prefered_vendor returns vendor with the highest revenue' do
+    all_revenue_array = []
+    market_vendor.each do |vendor|
+      all_revenue_array << vendor.revenue
+    end
+    max_revenue = all_revenue_array.max
+
+    expect(rand_mar_pref_vend.revenue).must_equal(max_revenue)
+  end
+
+  it '.prefered_vendor(date) returns a FarMar::Vendor' do
+    specific_market = FarMar::Market.find(1)
+    expect(specific_market.prefered_vendor('2013-11-11').class).must_equal(FarMar::Vendor)
+  end
+
+  it '.prefered_vendor(date) returns vendor with the highest revenue on that date' do
+    specific_market = FarMar::Market.find(1)
+
+    best_vendor = specific_market.prefered_vendor('2013-11-11')
+
+    expect(best_vendor.vendor_id).must_equal(4)
+  end
+
+  it '.worst_vendor returns a single FarMar::Vendor' do
+    expect(rand_mar_worst_vend.class).must_equal(FarMar::Vendor)
+  end
+
+  it '.worst_vendor returns vendor with the lowest revenue' do
+    all_revenue_array = []
+    market_vendor.each do |vendor|
+      all_revenue_array << vendor.revenue
+    end
+    min_revenue = all_revenue_array.min
+
+    expect(rand_mar_worst_vend.revenue).must_equal(min_revenue)
+  end
+
+  it '.prefered_vendor(date) returns a FarMar::Vendor' do
+    specific_market = FarMar::Market.find(1)
+    expect(specific_market.worst_vendor('2013-11-11').class).must_equal(FarMar::Vendor)
+  end
+
+  it '.worst_vendor(date) returns vendor with the lowest revenue on that date' do
+    specific_market = FarMar::Market.find(1)
+
+    worst_vendor = specific_market.worst_vendor('2013-11-11')
+
+    expect(worst_vendor.vendor_id).must_equal(2)
   end
 
 

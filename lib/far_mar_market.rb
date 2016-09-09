@@ -95,19 +95,35 @@ class FarMar::Market
   end
 
   #prefered_vendor: returns the vendor with the highest revenue
-  def prefered_vendor
-  end
+  def prefered_vendor(date = nil)
+    highest_revenue = 0
+    highest_revenue_vendor = nil
+    vendors.each do |vendor|
+      revenue = vendor.revenue(date)
+      if revenue > highest_revenue
+        highest_revenue = revenue
+        highest_revenue_vendor = vendor
+      end
+    end
 
-  #prefered_vendor(date): returns the vendor with the highest revenue for the given date
-  def prefered_vendor(date)
+    highest_revenue_vendor
+
   end
 
   #worst_vendor: returns the vendor with the lowest revenue
-  def worst_vendor
-  end
+  def worst_vendor(date = nil)
+    lowest_revenue = 1000000000000
+    lowest_revenue_vendor = nil
+    vendors.each do |vendor|
+      revenue = vendor.revenue(date)
+      if revenue < lowest_revenue
+        lowest_revenue = revenue
+        lowest_revenue_vendor = vendor
+      end
+    end
 
-  #worst_vendor(date): returns the vendor with the lowest revenue on the given date
-  def worst_vendor(date)
+    lowest_revenue_vendor
+    
   end
 
 end

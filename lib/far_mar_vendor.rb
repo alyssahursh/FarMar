@@ -63,9 +63,9 @@ class FarMar::Vendor
   end
 
   # sales: returns a collection of FarMar::Sale instances that are associated by the vendor_id field.
-  def sales
+  def sales(date = nil)
     sale_array = []
-    all_sales = FarMar::Sale.all
+    all_sales = FarMar::Sale.all(date)
     all_sales.each do |sale|
       if sale.vendor_id == @vendor_id
         sale_array << sale
@@ -75,9 +75,9 @@ class FarMar::Vendor
   end
 
   # revenue: returns the the sum of all of the vendor's sales (in cents)
-  def revenue
+  def revenue(date = nil)
     total_vendor_revenue = 0
-    sale_array = sales
+    sale_array = sales(date)
     sale_array.each do |sale|
       total_vendor_revenue += sale.sale_amount
     end
