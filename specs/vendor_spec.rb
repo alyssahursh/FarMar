@@ -7,14 +7,30 @@ require_relative '../lib/far_mar_vendor.rb'
 describe 'Test Vendor' do
 
   let(:vendors) { FarMar::Vendor.all }
-  let(:length) { CSV.read('/Users/alyssa/ada/Week5/FarMar/support/vendors.csv').length }
+  let(:vendor_array_length) { CSV.read('/Users/alyssa/ada/Week5/FarMar/support/vendors.csv').length }
+  let(:rand_num) { rand(vendor_array_length) }
+  let(:random_vendor) { vendors[rand_num] }
+  let(:found_vendor) { FarMar::Vendor.find(rand_num)}
+  let(:random_vendor_market) { random_vendor.market }
+  let(:random_vendor_products) { random_vendor.products }
+  let(:random_vendor_sales) { random_vendor.sales }
+  let(:random_vendor_revenue) { random_vendor.revenue }
+  let(:sale_list) { FarMar::Sale.all }
+  let(:vendor_array) { FarMar::Vendor.by_market(random_vendor_market.market_id) }
+  #
+  #
+  # let(:found_product) { FarMar::Product.find(rand_num) }
+  # let(:all_vendors) { FarMar::Vendor.all }
+  #
+  # let(:random_product_sales) { random_product.sales }
+  # let(:by_vendor) { FarMar::Product.by_vendor(product_vendor.vendor_id) }
 
   it 'self.all method returns an object of class Array' do
     expect(vendors.class).must_equal(Array)
   end
 
   it 'self.all Array contains the same number of elements as the length of the original CSV' do
-    expect(vendors.length).must_equal(length)
+    expect(vendors.length).must_equal(vendor_array_length)
   end
 
   it 'Elements of self.all is an instance of the class FarMar::Vendor' do
@@ -23,11 +39,12 @@ describe 'Test Vendor' do
     end
   end
 
-  it 'self.find(id) method returns instance of the class FarMar::Market with correct ID' do
-    random_number = rand(length)
-    found_vendor = FarMar::Vendor.find(random_number)
+  it 'self.find(id) method returns instance of the class FarMar::Market' do
     expect(found_vendor.class).must_equal(FarMar::Vendor)
-    expect(found_vendor.vendor_id).must_equal(random_number)
+  end
+
+  it 'self.find(id) method returns instance of the class FarMar::Market' do
+    expect(found_vendor.vendor_id).must_equal(rand_num)
   end
 
   it 'self.find(id) raises argument error for non-numeric input' do
@@ -39,102 +56,72 @@ describe 'Test Vendor' do
   end
 
   it '.market returns a FarMar::Market instance' do
-    vendor = vendors[rand(length)]
-    market = vendor.market
-    expect(market.class).must_equal(FarMar::Market)
+    expect(random_vendor_market.class).must_equal(FarMar::Market)
   end
 
   it '.market returns the instance with the correct market_id field' do
-    vendor = vendors[rand(length)]
-    market = vendor.market
-    expect(market.market_id).must_equal(vendor.market_id)
+    expect(random_vendor_market.market_id).must_equal(random_vendor.market_id)
   end
 
   it '.products returns an Array' do
-    vendor = vendors[rand(length)]
-    products = vendor.products
-    expect(products.class).must_equal(Array)
+    expect(random_vendor_products.class).must_equal(Array)
   end
 
   it 'the elements in the .products array are FarMar:Product instances' do
-    vendor = vendors[rand(length)]
-    products = vendor.products
-    products.each do |product|
+    random_vendor_products.each do |product|
       expect(product.class).must_equal(FarMar::Product)
     end
   end
 
   it 'the instances in the .products array have the correct vendor_id number' do
-    vendor = vendors[rand(length)]
-    products = vendor.products
-    products.each do |product|
-      expect(product.vendor_id).must_equal(vendor.vendor_id)
+    random_vendor_products.each do |product|
+      expect(product.vendor_id).must_equal(random_vendor.vendor_id)
     end
   end
 
   it '.sales returns an array' do
-    vendor = vendors[rand(length)]
-    sales = vendor.sales
-    expect(sales.class).must_equal(Array)
+    expect(random_vendor_sales.class).must_equal(Array)
   end
 
   it 'the elements in the .sales array are FarMar::Sale instances' do
-    vendor = vendors[rand(length)]
-    sales = vendor.sales
-    sales.each do |sale|
+    random_vendor_sales.each do |sale|
       expect(sale.class).must_equal(FarMar::Sale)
     end
   end
 
   it 'the instances in the .sales array have the correct vendor_id number' do
-    vendor = vendors[rand(length)]
-    sales = vendor.sales
-    sales.each do |sale|
-      expect(sale.vendor_id).must_equal(vendor.vendor_id)
+    random_vendor_sales.each do |sale|
+      expect(sale.vendor_id).must_equal(random_vendor.vendor_id)
     end
   end
 
   it '.revenue returns an integer' do
-    vendor = vendors[rand(length)]
-    revenue = vendor.revenue
-    expect(revenue.class).must_equal(Fixnum)
+    expect(random_vendor_revenue.class).must_equal(Fixnum)
   end
 
   it '.revenue returns the correct sum' do
-    vendor = vendors[rand(length)]
     revenue_total = 0
-    all_sales = FarMar::Sale.all
-    all_sales.each do |sale|
-      if sale.vendor_id == vendor.vendor_id
+    sale_list.each do |sale|
+      if sale.vendor_id == random_vendor.vendor_id
         revenue_total += sale.sale_amount
       end
     end
-    expect(vendor.revenue).must_equal(revenue_total)
-
+    expect(random_vendor.revenue).must_equal(revenue_total)
   end
 
   it 'self.by_market(market_id) returns an array' do
-    all_markets = FarMar::Market.all
-    random_market = all_markets[rand(all_markets.length)]
-    vendor_array = FarMar::Vendor.by_market(random_market.market_id)
     expect(vendor_array.class).must_equal(Array)
   end
 
   it 'the elements of self.by_market(market_id) array are instances of FarMar:Vendor' do
-    all_markets = FarMar::Market.all
-    random_market = all_markets[rand(all_markets.length)]
-    vendor_array = FarMar::Vendor.by_market(random_market.market_id)
     vendor_array.each do |vendor|
       expect(vendor.class).must_equal(FarMar::Vendor)
     end
   end
 
-  it 'the elements of self.by_market(market_id) array have the correct vendor_id' do
-    all_markets = FarMar::Market.all
-    random_market = all_markets[rand(all_markets.length)]
-    vendor_array = FarMar::Vendor.by_market(random_market.market_id)
+  it 'the elements of self.by_market(market_id) array have the correct market_id' do
     vendor_array.each do |vendor|
-      expect(vendor.market_id).must_equal(random_market.market_id)
+      expect(vendor.market_id).must_equal(random_vendor_market.market_id)
     end
   end
 
