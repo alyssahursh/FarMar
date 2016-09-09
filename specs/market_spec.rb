@@ -13,6 +13,8 @@ describe 'Test Market' do
   let(:random_market) { markets[rand_num] }
   let(:market_vendor) { random_market.vendors }
   let(:found_market) { FarMar::Market.find(rand_num) }
+  let(:some_products) { random_market.products }
+  let(:search_school) { FarMar::Market.search('school') }
 
 
   it 'self.all method returns an object of class Array' do
@@ -61,6 +63,45 @@ describe 'Test Market' do
       expect(vendor.market_id).must_equal(random_market.market_id)
     end
   end
+
+  it '.products returns an array' do
+    expect(some_products.class).must_equal(Array)
+  end
+
+  it '.products returns an instance of FarMar:Product' do
+    some_products.each do |product|
+      expect(product.class).must_equal(FarMar::Product)
+    end
+  end
+
+  it '.products returns products whose vendor is present at this market' do
+    vendor_id_array = []
+    market_vendor.each do |vendor|
+      vendor_id_array << vendor.vendor_id
+    end
+
+    some_products.each do |product|
+      expect(vendor_id_array).must_include(product.vendor_id)
+    end
+  end
+
+  it 'self.search(search_term) returns an array' do
+    expect(search_school.class).must_equal(Array)
+  end
+
+  it 'Elements of the self.search(search_term) array are FarMar::Market' do
+    search_school.each do |search_result|
+      expect(search_result.class).must_equal(FarMar::Market)
+    end
+  end
+
+  it 'Elements of the self.search(search_term) array contain the search term' do
+    search_school.each do |search_result|
+      search_result_string = "#{search_result.market_id} #{search_result.market_name} #{search_result.market_address} #{search_result.market_city} #{search_result.market_county} #{search_result.market_state} #{search_result.market_zip}".gsub(/[[:punct:]]/, " ").downcase
+      expect(search_result_string).must_include('school')
+    end
+  end
+
 
   # if 'self.all does not allow duplicates' do
   #   expect(markets.uniq.length).must_equal(markets.length)

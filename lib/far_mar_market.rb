@@ -4,7 +4,7 @@ require_relative '../far_mar.rb'
 
 class FarMar::Market
 
-  attr_reader :market_id
+  attr_reader :market_id, :market_name, :market_address, :market_city, :market_county, :market_state, :market_zip
 
   def initialize(market_hash)
     @market_id = market_hash[:market_id] # (Fixnum) a unique identifier for that market
@@ -47,14 +47,67 @@ class FarMar::Market
   end
 
   def vendors
-    all_vendors = FarMar::Vendor.all
     vendor_of_market_array = []
+    all_vendors = FarMar::Vendor.all
     all_vendors.each do |vendor|
       if vendor.market_id == @market_id
         vendor_of_market_array << vendor
       end
     end
     vendor_of_market_array
+  end
+
+  #products returns a collection of FarMar::Product instances that are associated to the market through the FarMar::Vendor class.
+  def products
+    all_vendors = FarMar::Vendor.all
+    associated_products = []
+
+    all_vendors.each do |vendor|
+      if vendor.market_id == @market_id
+        associated_products << vendor.products
+      end
+    end
+
+    if associated_products.flatten == nil
+      associated_products.uniq!
+    else
+      associated_products.flatten!.uniq!
+    end
+
+    return associated_products
+  end
+
+  #self.search(search_term) returns a collection of FarMar::Market instances where the market name or vendor name contain the search_term. For example FarMar::Market.search('school') would return 3 results, one being the market with id 75 (Fox School Farmers FarMar::Market).
+  def self.search(search_term)
+    search_result_markets = []
+    all.each do |market|
+      market_string = "#{market.market_id} #{market.market_name} #{market.market_address} #{market.market_city} #{market.market_county} #{market.market_state} #{market.market_zip}".gsub(/[[:punct:]]/, " ").downcase
+      if market_string.include? search_term
+        search_result_markets << market
+      end
+    end
+
+    if search_result_markets.length == 0
+      raise ArgumentError, "No markets match that search term"
+    else
+      return search_result_markets
+    end
+  end
+
+  #prefered_vendor: returns the vendor with the highest revenue
+  def prefered_vendor
+  end
+
+  #prefered_vendor(date): returns the vendor with the highest revenue for the given date
+  def prefered_vendor(date)
+  end
+
+  #worst_vendor: returns the vendor with the lowest revenue
+  def worst_vendor
+  end
+
+  #worst_vendor(date): returns the vendor with the lowest revenue on the given date
+  def worst_vendor(date)
   end
 
 end

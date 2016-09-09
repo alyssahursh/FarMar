@@ -95,6 +95,22 @@ class FarMar::Vendor
     vendors_by_market
   end
 
+  # self.most_revenue(n) returns the top n vendor instances ranked by total revenue
+  # def self.most_revenue(n)
+  # end
+  #
+  # # self.most_items(n) returns the top n vendor instances ranked by total number of items sold
+  # def self.most_items(n)
+  # end
+  #
+  # # self.revenue(date) returns the total revenue for that date across all vendors
+  # def self.revenue(date)
+  # end
+  #
+  # # revenue(date) returns the total revenue for that specific purchase date and vendor instance
+  # def revenue(date)
+  # end
+
 
 
 
