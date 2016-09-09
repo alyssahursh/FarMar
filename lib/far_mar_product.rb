@@ -1,15 +1,6 @@
 # far_mar_product.rb
 
 require_relative '../far_mar.rb'
-# require_relative '../support/products.csv'
-
-#
-# Each product belongs to a product. The `product_id` field refers to the `FarMar::Product` ID field. The `FarMar::Product` data, in order in the CSV, consists of:
-#
-# 1. ID - (Fixnum) uniquely identifies the product
-# 2. Name - (String) the name of the product (not guaranteed unique)
-# 3. Product_id - (Fixnum) a reference to which product sells this product
-
 
 class FarMar::Product
 

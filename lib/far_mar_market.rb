@@ -1,15 +1,6 @@
 # far_mar_market.rb
 
 require_relative '../far_mar.rb'
-# require_relative '../support/markets.csv'
-
-# 1. ID - (Fixnum) a unique identifier for that market
-# 2. Name - (String) the name of the market (not guaranteed unique)
-# 3. Address - (String) street address of the market
-# 4. City - (String) city in which the market is located
-# 5. County - (String) county in which the market is located
-# 6. State - (String) state in which the market is located
-# 7. Zip - (String) zipcode in which the market is located
 
 class FarMar::Market
 
@@ -47,9 +38,7 @@ class FarMar::Market
 
   def self.find(id)
     raise ArgumentError, "Market ID must be numeric" if id =~ /[[:alpha][:punct:][:blank:]]/
-
-    array = all
-    array.each do |market|
+    all.each do |market|
       if market.market_id == id.to_i
         return market
       end
@@ -58,18 +47,14 @@ class FarMar::Market
   end
 
   def vendors
-
-    complete_vendor_array = FarMar::Vendor.all
+    all_vendors = FarMar::Vendor.all
     vendor_of_market_array = []
-
-    complete_vendor_array.each do |vendor|
+    all_vendors.each do |vendor|
       if vendor.market_id == @market_id
         vendor_of_market_array << vendor
       end
     end
-
     vendor_of_market_array
-
   end
 
 end
