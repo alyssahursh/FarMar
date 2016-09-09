@@ -60,14 +60,12 @@ class FarMar::Sale
 
   # vendor: returns the FarMar::Vendor instance that is associated with this sale using the FarMar::Sale vendor_id field
   def vendor
-    sale_vendor = FarMar::Vendor.find(vendor_id)
-    sale_vendor
+    return FarMar::Vendor.find(vendor_id)
   end
 
   # product: returns the FarMar::Product instance that is associated with this sale using the FarMar::Sale product_id field
   def product
-    sale_product = FarMar::Product.find(product_id)
-    sale_product
+    return FarMar::Product.find(product_id)
   end
 
   # self.between(beginning_time, end_time): returns a collection of FarMar::Sale objects where the purchase time is between the two times given as arguments
