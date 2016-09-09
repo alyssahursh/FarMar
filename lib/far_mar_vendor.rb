@@ -1,13 +1,6 @@
 # far_mar_vendor.rb
 
 require_relative '../far_mar.rb'
-# require_relative '../support/vendors.csv'
-
-#
-# 1. ID - (Fixnum) uniquely identifies the vendor
-# 2. Name - (String) the name of the vendor (not guaranteed unique)
-# 3. No. of Employees - (Fixnum) How many employees the vendor has at the market
-# 4. Market_id - (Fixnum) a reference to which market the vendor attends
 
 class FarMar::Vendor
 
@@ -42,8 +35,7 @@ class FarMar::Vendor
   def self.find(id)
     raise ArgumentError, "Vendor ID must be numeric" if id =~ /[[:alpha][:punct:][:blank:]]/
 
-    array = all
-    array.each do |vendor|
+    all.each do |vendor|
       if vendor.vendor_id == id
         return vendor
       end
@@ -95,8 +87,7 @@ class FarMar::Vendor
   # self.by_market(market_id): returns all of the vendors with the given market_id
   def self.by_market(market_id)
     vendors_by_market = []
-    all_vendors = all
-    all_vendors.each do |vendor|
+    all.each do |vendor|
       if vendor.market_id == market_id
         vendors_by_market << vendor
       end

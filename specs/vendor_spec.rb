@@ -17,13 +17,6 @@ describe 'Test Vendor' do
   let(:random_vendor_revenue) { random_vendor.revenue }
   let(:sale_list) { FarMar::Sale.all }
   let(:vendor_array) { FarMar::Vendor.by_market(random_vendor_market.market_id) }
-  #
-  #
-  # let(:found_product) { FarMar::Product.find(rand_num) }
-  # let(:all_vendors) { FarMar::Vendor.all }
-  #
-  # let(:random_product_sales) { random_product.sales }
-  # let(:by_vendor) { FarMar::Product.by_vendor(product_vendor.vendor_id) }
 
   it 'self.all method returns an object of class Array' do
     expect(vendors.class).must_equal(Array)
